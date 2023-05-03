@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 //import 'package:path/path.dart' as p;
 import 'package:url_launcher/url_launcher.dart';
+import 'package:vibration/vibration.dart';
 void main() => runApp( MaterialApp(
   title: 'MyBraille',
   home: Braillewriting(),
@@ -32,8 +34,8 @@ class Braillewritingstate extends State<Braillewriting>{
   //set val(String val) {
     //text1 = val;
   //}
-  String x= "";
-   output(int sum,String x) {
+
+   output(int sum , String x) {
      if (sum== 10 ){
        setState((){
          x= "C";
@@ -44,6 +46,7 @@ class Braillewritingstate extends State<Braillewriting>{
      return x;
 
   }
+  String x= "";
   int sum = 0;
 
   @override
@@ -85,6 +88,7 @@ class Braillewritingstate extends State<Braillewriting>{
               FloatingActionButton.large(
                 child: const Text('1'),
                 onPressed: () async {
+                  Vibration.vibrate(duration: 200);
                   sum += 1;
 
                 },
@@ -92,6 +96,7 @@ class Braillewritingstate extends State<Braillewriting>{
               FloatingActionButton.large(
                 child: const Text('4'),
                 onPressed: () {
+                  Vibration.vibrate(duration: 400);
                   sum += 4;
                 },
               )
@@ -104,12 +109,14 @@ class Braillewritingstate extends State<Braillewriting>{
               FloatingActionButton.large(
                 child: const Text('2'),
                 onPressed: () {
+                  Vibration.vibrate(duration: 500);
                   sum += 2;
                 },
               ),
               FloatingActionButton.large(
                 child: const Text('5'),
                 onPressed: () {
+                  Vibration.vibrate(duration: 600);
                   sum += 5;
                 },
               )
@@ -122,12 +129,14 @@ class Braillewritingstate extends State<Braillewriting>{
               FloatingActionButton.large(
                 child: const Text('3'),
                 onPressed: () {
+                  Vibration.vibrate(duration: 700);
                   sum += 3;
                 },
               ),
               FloatingActionButton.large(
                 child: const Text('6'),
                 onPressed: () {
+                  Vibration.vibrate(duration: 800);
                   sum += 6;
                 },
               )
@@ -136,7 +145,7 @@ class Braillewritingstate extends State<Braillewriting>{
           Row(
             children: [
               TextButton(onPressed: () => output(sum, x),
-                  child: Text("Generate music note : $sum", style: TextStyle(fontSize: 26)),
+                  child: Text("Generate music note :  $x", style: TextStyle(fontSize: 26)),
               )
             ],
           ),
