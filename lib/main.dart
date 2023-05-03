@@ -1,15 +1,51 @@
 import 'package:flutter/material.dart';
-
-void main() => runApp(const MaterialApp(
+//import 'package:path/path.dart' as p;
+import 'package:url_launcher/url_launcher.dart';
+void main() => runApp( MaterialApp(
   title: 'MyBraille',
   home: Braillewriting(),
 ));
 
 
+launchWhatsApp() async {
+  const url = 'https://play.google.com/store/apps/details?id=com.musescore.playerlite';
+  if (await canLaunchUrl(Uri.parse(url))) {
+    await launchUrl(Uri.parse(url));
+  }
 
-class Braillewriting extends StatelessWidget{
+}
+
+class Braillewriting extends StatefulWidget {
   const Braillewriting({super.key});
+
+  @override
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    return Braillewritingstate();
+  }
+
+}
+class Braillewritingstate extends State<Braillewriting>{
   get text => 'MyBraille';
+  String text1 = "0";
+  get val => "0";
+  //set val(String val) {
+    //text1 = val;
+  //}
+  String x= "";
+   output(int sum,String x) {
+     if (sum== 10 ){
+       setState((){
+         x= "C";
+       });
+     }else if( sum == 6){setState(() {
+       x= "D";
+     });}
+     return x;
+
+  }
+  int sum = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,22 +61,22 @@ class Braillewriting extends StatelessWidget{
           Row(
             mainAxisSize: MainAxisSize.max,
             children: [
-              Flexible(child: IconButton(onPressed: (
-
-                  ){}, icon: const Icon(Icons.disabled_visible))),
-              Flexible(child: IconButton(onPressed: (){
+              Flexible(child: IconButton(
+                  onPressed: () {}, icon: const Icon(Icons.disabled_visible))),
+              Flexible(child: IconButton(onPressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return const MusicXML();
+                  return MusicXML();
                 }));
               }, icon: const Icon(Icons.print))),
               Flexible(
-                child: IconButton(onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return MusicNote();
-                  }));
-                },
-                  icon: const Icon(Icons.music_note),)),
-              ],
+                  child: IconButton(onPressed: () {
+                    Navigator.push(
+                        context, MaterialPageRoute(builder: (context) {
+                      return MusicNote();
+                    }));
+                  },
+                    icon: const Icon(Icons.music_note),)),
+            ],
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -48,13 +84,16 @@ class Braillewriting extends StatelessWidget{
             children: [
               FloatingActionButton.large(
                 child: const Text('1'),
-                onPressed: (){
+                onPressed: () async {
+                  sum += 1;
 
-                  },
+                },
               ),
               FloatingActionButton.large(
-                  child: const Text('4'),
-                  onPressed: (){},
+                child: const Text('4'),
+                onPressed: () {
+                  sum += 4;
+                },
               )
             ],
           ),
@@ -64,13 +103,15 @@ class Braillewriting extends StatelessWidget{
             children: [
               FloatingActionButton.large(
                 child: const Text('2'),
-                onPressed: (){
-
+                onPressed: () {
+                  sum += 2;
                 },
               ),
               FloatingActionButton.large(
                 child: const Text('5'),
-                onPressed: (){},
+                onPressed: () {
+                  sum += 5;
+                },
               )
             ],
           ),
@@ -80,49 +121,86 @@ class Braillewriting extends StatelessWidget{
             children: [
               FloatingActionButton.large(
                 child: const Text('3'),
-                onPressed: (){
-
+                onPressed: () {
+                  sum += 3;
                 },
               ),
               FloatingActionButton.large(
                 child: const Text('6'),
-                onPressed: (){},
+                onPressed: () {
+                  sum += 6;
+                },
               )
             ],
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            mainAxisSize: MainAxisSize.max,
             children: [
-              Flexible(child: TextFormField()),
-              FloatingActionButton(
-                child: const Icon(Icons.send),
-                onPressed: (){},
-              ),
-
+              TextButton(onPressed: () => output(sum, x),
+                  child: Text("Generate music note : $sum", style: TextStyle(fontSize: 26)),
+              )
             ],
-          )
+          ),
         ],
       ),
 
     );
   }
 }
+
+
 class MusicNote extends StatelessWidget {
-  const MusicNote({super.key});
+   MusicNote({super.key});
   @override
+  int z =1;
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('MusicNote'),
       ),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Row(
+          const Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              FloatingActionButton(onPressed: (){
+              Text("Music playlist", style: TextStyle(fontSize: 25),)
+            ],
+          ),
+           Row(
+             mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+
+              Text("Music piece n°1", style: TextStyle(fontSize: 20),),
+              IconButton(
+                  onPressed: (){
+                  if(z == 1){
+                    Icon(Icons.play_arrow);
+                    z = 0;
+                  }else{
+                    Icon(Icons.pause);
+                    z = 1;}
 
               },
+                icon: Icon(Icons.play_arrow),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Text("Music piece n°2", style: TextStyle(fontSize: 20),),
+              IconButton(
+                onPressed: (){
+                  if(z == 1){
+                    Icon(Icons.play_arrow);
+                    z = 0;
+                  }else{
+                    Icon(Icons.pause);
+                    z = 1;}
+
+                },
+                icon: Icon(Icons.play_arrow),
               ),
             ],
           )
@@ -139,9 +217,20 @@ class MusicXML extends StatelessWidget {
       appBar: AppBar(
         title: Text('MusicXML'),
       ),
-      body: const Text(
-        "salut!"
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TextButton(onPressed: (){}, child: Text("choose your XML file to translate", style: TextStyle(fontSize: 18, color: Colors.black),)),
+              Flexible(child: IconButton(onPressed: (){}, icon: Icon(Icons.upload_file),)),
+            ],
+          ),
+        ],
       ),
+
+
     );
   }
 }
